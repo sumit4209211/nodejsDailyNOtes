@@ -1,0 +1,278 @@
+require : to load a module in to nodejs prog...
+require("mongojs")
+
+nodejs supports many modules like fs,express-session,mongojs,....
+first we need to install module using 
+npm install <modulename>
+npm install mongojs
+  node_modules folder is creating in your location
+    inside all packages are available 
+node js package functions contains call backs.
+	   callback function executes itself when the associated task execution completed
+	   every function in nodejs last arg.. is call back
+	   in call back first arg is error which thrown by associated function
+		stntax :function(){}
+
+fs:To work with file handling concept
+   To read and to write contents of file
+   fs package providing function to read/write contents of file(readFile,writeFile,...)
+   --------------------
+   
+readFile: To read contents of file
+
+var fss=require("fs")
+fss.readFile("xyzs.txt",function(err,data){
+	if(err)
+	console.log(err)
+		else
+	console.log(data.toString())
+})
+writeFile: To write contents in file
+
+var fsref=require("fs")
+fsref.writeFile("xyz.txt","scott",function(err){
+	if(err)
+		console.log(err)
+	else
+		console.log("File data modified")
+})
+appendFile: To append the contents in file
+ fs=require("fs")
+fs.appendFile("xyzab.txt","Raj",function(er){
+	if(er)
+		console.log(er)
+	else
+		console.log("File data appended")
+})
+unlink : To remove a file
+fs=require("fs")
+fs.unlink("xyz.txt",function(err){
+	if(err)
+		console.log(err)
+	else
+		console.log("Deleted")
+		
+})
+rename: To change the name of file
+obj=require("fs")
+obj.rename("abc.txt","newfile.txt",function(err){
+	if(err)
+		console.log(err)
+	else
+		console.log("File name has been changed")
+})
+readDir : To read the files of a directory
+fs=require("fs")
+fs.readdir("c:/nodejs",function(err,files){
+	if(err)
+		console.log(err)
+	else
+	{
+		for(i=0;i<files.length-1;i++)
+		{
+			console.log("File name is - "+files[i])
+		}
+			console.log(files.length)
+	}
+	
+})
+readFileSync : To read file contents. It is Synchronous function
+fs=require("fs")
+data=fs.readFileSync("newfile.txt")
+console.log(data.toString())
+console.log("hi")
+
+writeFileSync : To write file contents. It is Synchronous function
+fs=require("fs")
+fs.writeFileSync("notes.txt","This is notes")
+console.log("Hi")
+
+mkdir:To create directory
+fs=require("fs")
+fs.mkdir("mynewdir",function(err){
+	if(err)
+		console.log(err)
+	else
+		console.log("Directory cre..")
+})
+rmdir:To remove directory
+fs=require("fs")
+fs.rmdir("mynewdir",function(err){
+	if(err)
+		console.log(err)
+		else
+	console.log("Dire.. Deleted")
+})
+
+ExpressJS: Framework of nodejs.
+npm install expressjs
+listen : to specift port number of server
+
+API service :Application programing interface -  a kind of function to access 
+from different platforms
+
+Http Request methods
+   get
+   post
+   put 
+   delete
+Syntax to create API
+  appref.httpmethod(</service name>,<Callback function>)
+ in call back of API we need to provide 2 arguments one is request object another one is 
+ response object
+
+ send - this function we can use to send data to out side from API
+
+ var exp=require("express")
+fs=require("fs")
+app=exp()
+app.listen(1000)
+console.log("Server started")
+
+app.get("/apimet1",function(req,res){
+	console.log("Service called")
+		res.send("Output from api")
+})
+
+		app.get("/apitosenddata",function(rq,rs){
+			fs.readFile("newfile.txt",function(err,data){
+				if(err)
+				rs.send(err)
+					else
+					rs.send(data.toString())
+			})
+		})
+
+
+
+4th June
+Router() - This object belongs to express package to create API in seperate file
+	module.exports is a function to export router object
+Example
+
+**********************************************************
+myproj.js
+---------
+exp=require("express")
+app=exp()
+app.listen(1000)
+
+loginref=require("./login.js")
+app.use("/lgpath",loginref)
+
+login.js
+--------
+rt=exp.Router()
+
+rt.get("/met1",function(req,res){
+	res.send("output from login api1")
+})
+
+	rt.get("/met2",function(req,res){
+	res.send("output from login api2")
+})
+		module.exports=rt
+**********************************************************
+
+nodemailer : To send mails from our application to destination mail id
+  SMTP(simple mail transfer protocol) server: It is a server to send mails(gmail,yahoo,....)
+
+createTransport : Using this function we can specify properties 
+	like(servername,auth username,password)
+      service : This property we can use to specify SMTP server name
+      auth : To specify authentication details
+       user: To specify username of gmail account
+       pass: To specify password of gmail account
+
+sendMail : Using this function we can send email to destination location
+   to address
+   from address
+   subject
+   body/html
+   sendMail requires second argument it is a call back 
+   function to execute statements when mail sent
+
+mailer=require("nodemailer")
+
+transport=mailer.createTransport({
+	service:"gmail",
+		auth:{
+		 user:"example.durgasoft@gmail.com",
+		 pass:"iljtmnbv"
+		}
+})
+transport.sendMail({
+	to:"bheru7@gmail.com",
+	from:"example.durgasoft@gmail.com",
+	subject:"Test mail",
+		text:"<h1 style='background-color:blue;color:white'>Order Details</h1>"
+},function(err,data){
+	if(err)
+		console.log(err)
+		else
+		console.log(data)
+})
+
+5th June
+-------
+body-parser : Using this package we can read then data of request body. 
+It is providing methods to specify the type of data which you want to receive.
+
+	json() : To receive json format data from request
+	text() : To receive text format data
+
+  body - This is object contains information of request body
+Ex:1
+---
+exp=require("express")
+bp=require("body-parser")
+app=exp()
+app.use(bp.json())
+app.listen(1000)
+
+app.post("/met1",function(req,res){
+	console.log(req.body)
+	res.send("hi")
+		console.log(req.body.city)
+		
+})
+
+Ex:2
+----
+nm=require("nodemailer")
+exp=require("express")
+bodyp=require("body-parser")
+app=exp()
+app.listen(1000)
+app.use(bodyp.json())
+app.post("/sendmailapi",function(req,res){
+	usermail=req.body.toaddress
+	console.log(usermail)
+	trans=nm.createTransport({
+		service:"gmail",
+			auth:{
+			 user:"example.durgasoft@gmail.com",
+			 pass:"iljtmnbv"
+			}
+	})
+		trans.sendMail({
+			to:usermail,subject:"Test",from:"example.durgasoft@gmail.com",text:req.body.txt
+		},function(err,data){
+			if(err)
+				res.send(err)
+				else
+				res.send("Mail sent")
+		})
+})
+
+11 June 
+Ajax : It is a web technology to send request to server with out submit the web page
+
+  asynchronous: Sending a request to server with out waiting for previous response
+  Javascript - Using javascript we can create ajax object and send object to server
+  XML - Data between browser and server trans.. in the form of XML
+
+  request - using this package we can work with AJAX
+
+     
+
